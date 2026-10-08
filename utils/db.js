@@ -1,12 +1,15 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const Database = require('better-sqlite3');
+const log = require('./logger');
 
 const dataDir = path.join(__dirname, '..', 'data');
 fs.mkdirSync(dataDir, { recursive: true });
 
-const db = new Database(path.join(dataDir, 'feur.db'));
+const dbPath = path.join(dataDir, 'feur.db');
+const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
+log.debug(`SQLite opened at ${dbPath}`);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS counts (

@@ -60,6 +60,13 @@ function sameCommands(a, b) {
   return JSON.stringify(norm(a)) === JSON.stringify(norm(b));
 }
 
+function deployHint(err) {
+  if (err && (err.code === 50001 || /missing access/i.test(err.message || ''))) {
+    return ' (Missing Access: re-invite the bot with the applications.commands scope)';
+  }
+  return '';
+}
+
 function loadCommandData() {
   const commandsPath = path.join(__dirname, '..', 'commands');
   return fs
@@ -116,10 +123,10 @@ async function deployToGuilds(client) {
       const { count, skipped } = await deployToGuild(client, id);
       results.push({ guild: guild.name || id, ok: true, count, skipped });
     } catch (err) {
-      results.push({ guild: guild.name || id, ok: false, error: err.message });
+      results.push({ guild: guild.name || id, ok: false, error: err.message + deployHint(err) });
     }
   }
   return results;
 }
 
-module.exports = { deployCommands, deployToGuild, deployToGuilds, clearGlobalCommands, loadCommandData, sameCommands };
+module.exports = { deployCommands, deployToGuild, deployToGuilds, clearGlobalCommands, loadCommandData, sameCommands, deployHint };

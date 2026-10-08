@@ -12,6 +12,7 @@ module.exports = {
       return;
     }
     try {
+      log.info(`/${interaction.commandName} used by ${interaction.user.tag} in ${interaction.guild?.name || 'DM'}`);
       await command.execute(interaction);
     } catch (err) {
       log.error(`Command ${interaction.commandName} failed:`, err.message);

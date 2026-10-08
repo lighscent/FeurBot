@@ -9,9 +9,14 @@ module.exports = {
   async execute(message) {
     if (message.author.bot) return;
     if (!containsQuoi(message.content)) return;
-    Counter.incr(message.guildId, message.author.id);
+    try {
+      Counter.incr(message.guildId, message.author.id);
+    } catch (err) {
+      log.warn(`Counter failed: ${err.message}`);
+    }
     try {
       await message.reply('feur');
+      log.debug(`Replied feur to ${message.author.tag} in ${message.guild?.name || 'DM'}`);
     } catch (err) {
       log.error('Reply failed:', err.message);
     }

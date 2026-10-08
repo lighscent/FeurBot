@@ -23,7 +23,6 @@ module.exports = {
 
     let i = 0;
     const rotate = () => {
-      // Skip while the gateway is down: setPresence would pile listeners on a dead shard.
       if (!client.isReady()) return;
       const activity = ACTIVITIES[i % ACTIVITIES.length];
       i += 1;
